@@ -52,7 +52,7 @@ public class PagamentoService {
 
     public PagamentoResponse findById(Integer codigo) {
         return pagamentoRepository
-                .findById(codigo)
+                .findByCodigoAndExcluido(codigo, Boolean.FALSE)
                 .map(pagamentoMapper::mapToResponse)
                 .orElseThrow(() -> new RegisterNotFoundException(codigo));
     }
@@ -100,7 +100,7 @@ public class PagamentoService {
 
     public PagamentoResponse update(Integer codigo, PagamentoRequest pagamentoRequest) {
         Pagamento pagamento = pagamentoRepository
-                .findById(codigo)
+                .findByCodigoAndExcluido(codigo, Boolean.FALSE)
                 .orElseThrow(() -> new RegisterNotFoundException(codigo));
 
         pagamentoMapper.updateFromDTO(pagamento, pagamentoRequest);
@@ -110,7 +110,7 @@ public class PagamentoService {
 
     public void delete(Integer codigo) {
         Pagamento pagamento = pagamentoRepository
-                .findById(codigo)
+                .findByCodigoAndExcluido(codigo, Boolean.FALSE)
                 .orElseThrow(() -> new RegisterNotFoundException(codigo));
 
         pagamento.setExcluido(Boolean.TRUE);
@@ -121,7 +121,7 @@ public class PagamentoService {
     @Transactional
     public PagamentoResponse processarPagamento(Integer codigo, StatusProcessamento status) {
         Pagamento pagamento = pagamentoRepository
-                .findById(codigo)
+                .findByCodigoAndExcluido(codigo, Boolean.FALSE)
                 .orElseThrow(() -> new RegisterNotFoundException(codigo));
 
 

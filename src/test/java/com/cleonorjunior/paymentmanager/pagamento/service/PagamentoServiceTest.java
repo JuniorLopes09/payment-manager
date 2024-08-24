@@ -79,7 +79,8 @@ class PagamentoServiceTest {
 
         when(mapper.mapToResponse(any())).thenReturn(pagamentoResponse);
 
-        when(pagamentoRepository.findById(pagamentoRequest.getCodigo())).thenReturn(Optional.of(pagamento));
+        when(pagamentoRepository.findByCodigoAndExcluido(pagamentoRequest.getCodigo(), Boolean.FALSE))
+                .thenReturn(Optional.of(pagamento));
 
         PagamentoResponse response = service.findById(pagamentoRequest.getCodigo());
 
@@ -148,13 +149,13 @@ class PagamentoServiceTest {
 
         BusinessException exception = assertThrows(BusinessException.class, () -> service.save(pagamentoRequest));
         assertEquals(PagamentoService.PAGAMENTO_JA_EXISTE_MESSAGE, exception.getMessage());
-
     }
 
     @Test
     void update() {
 
-        when(pagamentoRepository.findById(pagamentoRequest.getCodigo())).thenReturn(Optional.of(pagamento));
+        when(pagamentoRepository.findByCodigoAndExcluido(pagamentoRequest.getCodigo(), Boolean.FALSE))
+                .thenReturn(Optional.of(pagamento));
 
         when(mapper.mapToResponse(any())).thenReturn(pagamentoResponse);
         when(mapper.mapToEntity(any())).thenReturn(pagamento);
@@ -170,7 +171,8 @@ class PagamentoServiceTest {
     void delete() {
         when(pagamentoRepository.save(any())).thenReturn(pagamento);
 
-        when(pagamentoRepository.findById(pagamentoRequest.getCodigo())).thenReturn(Optional.of(pagamento));
+        when(pagamentoRepository.findByCodigoAndExcluido(pagamentoRequest.getCodigo(), Boolean.FALSE))
+                .thenReturn(Optional.of(pagamento));
 
         when(historicoProcessamentoRepository.save(any())).thenReturn(historicoProcessamento);
 
@@ -183,7 +185,8 @@ class PagamentoServiceTest {
     @Test
     void processarPagamento() {
 
-        when(pagamentoRepository.findById(pagamentoRequest.getCodigo())).thenReturn(Optional.of(pagamento));
+        when(pagamentoRepository.findByCodigoAndExcluido(pagamentoRequest.getCodigo(), Boolean.FALSE))
+                .thenReturn(Optional.of(pagamento));
         when(pagamentoRepository.save(any())).thenReturn(pagamento);
         when(mapper.mapToResponse(any())).thenReturn(pagamentoResponse);
         when(historicoProcessamentoRepository.save(any())).thenReturn(historicoProcessamento);
@@ -201,7 +204,8 @@ class PagamentoServiceTest {
         pagamentoEntity.setStatus(status);
 
 
-        when(pagamentoRepository.findById(pagamentoRequest.getCodigo())).thenReturn(Optional.of(pagamentoEntity));
+        when(pagamentoRepository.findByCodigoAndExcluido(pagamentoRequest.getCodigo(), Boolean.FALSE))
+                .thenReturn(Optional.of(pagamentoEntity));
         when(pagamentoRepository.save(any())).thenReturn(pagamento);
         when(mapper.mapToResponse(any())).thenReturn(pagamentoResponse);
         when(historicoProcessamentoRepository.save(any())).thenReturn(historicoProcessamento);
@@ -219,7 +223,8 @@ class PagamentoServiceTest {
 
         pagamentoEntity.setStatus(status);
 
-        when(pagamentoRepository.findById(pagamentoRequest.getCodigo())).thenReturn(Optional.of(pagamentoEntity));
+        when(pagamentoRepository.findByCodigoAndExcluido(pagamentoRequest.getCodigo(), Boolean.FALSE))
+                .thenReturn(Optional.of(pagamentoEntity));
         when(pagamentoRepository.save(any())).thenReturn(pagamento);
         when(mapper.mapToResponse(any())).thenReturn(pagamentoResponse);
         when(historicoProcessamentoRepository.save(any())).thenReturn(historicoProcessamento);
@@ -243,7 +248,8 @@ class PagamentoServiceTest {
 
         pagamentoEntity.setStatus(status);
 
-        when(pagamentoRepository.findById(pagamentoRequest.getCodigo())).thenReturn(Optional.of(pagamentoEntity));
+        when(pagamentoRepository.findByCodigoAndExcluido(pagamentoRequest.getCodigo(), Boolean.FALSE))
+                .thenReturn(Optional.of(pagamentoEntity));
         when(pagamentoRepository.save(any())).thenReturn(pagamento);
         when(mapper.mapToResponse(any())).thenReturn(pagamentoResponse);
         when(historicoProcessamentoRepository.save(any())).thenReturn(historicoProcessamento);
@@ -266,7 +272,8 @@ class PagamentoServiceTest {
 
         pagamentoEntity.setStatus(status);
 
-        when(pagamentoRepository.findById(pagamentoRequest.getCodigo())).thenReturn(Optional.of(pagamentoEntity));
+        when(pagamentoRepository.findByCodigoAndExcluido(pagamentoRequest.getCodigo(), Boolean.FALSE))
+                .thenReturn(Optional.of(pagamentoEntity));
         when(pagamentoRepository.save(any())).thenReturn(pagamento);
         when(mapper.mapToResponse(any())).thenReturn(pagamentoResponse);
         when(historicoProcessamentoRepository.save(any())).thenReturn(historicoProcessamento);
