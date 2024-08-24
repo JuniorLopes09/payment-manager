@@ -12,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -50,8 +51,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map((error) -> error
-                        .getDefaultMessage()
+                .map((error) -> Objects.requireNonNull(error.getDefaultMessage())
                         .replace("{field}", error.getField())
                         .replace("{value}", Optional.ofNullable(error.getRejectedValue()).map(Object::toString).orElse(""))
                 )
