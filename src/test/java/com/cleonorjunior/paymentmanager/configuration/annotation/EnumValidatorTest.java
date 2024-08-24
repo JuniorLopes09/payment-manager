@@ -1,12 +1,9 @@
 package com.cleonorjunior.paymentmanager.configuration.annotation;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import jakarta.validation.ConstraintValidatorContext;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
