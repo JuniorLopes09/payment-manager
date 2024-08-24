@@ -1,15 +1,18 @@
-FROM eclipse-temurin:17
+FROM ubuntu:latest AS build
+
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
+COPY . .
+
+RUN ./gradlew build
+
+FROM openjdk:17-jdk-slim
 
 RUN groupadd -r spring && useradd -r -g spring spring
 USER spring:spring
 
-WORKDIR /paymentmanager
-
-ARG JAR_FILE=build/libs/*-SNAPSHOT.jar
-
-COPY ${JAR_FILE} /paymentmanager/app.jar
-# Expose the port your application will run on
 EXPOSE 8080
 
-# Run the application
+COPY --from=build /build/libs/*.jar /paymentmanager/app.jar
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
