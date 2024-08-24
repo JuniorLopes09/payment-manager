@@ -1,10 +1,10 @@
 package com.cleonorjunior.paymentmanager.pagamento.controller;
 
+import com.cleonorjunior.paymentmanager.pagamento.domain.enums.StatusProcessamento;
 import com.cleonorjunior.paymentmanager.pagamento.domain.request.FiltroPagamentoRequest;
 import com.cleonorjunior.paymentmanager.pagamento.domain.request.PagamentoRequest;
-import com.cleonorjunior.paymentmanager.pagamento.domain.response.PagamentoResponse;
 import com.cleonorjunior.paymentmanager.pagamento.domain.request.ProcessarPagamentoRequest;
-import com.cleonorjunior.paymentmanager.pagamento.domain.enums.StatusProcessamento;
+import com.cleonorjunior.paymentmanager.pagamento.domain.response.PagamentoResponse;
 import com.cleonorjunior.paymentmanager.pagamento.service.PagamentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -70,7 +70,7 @@ public class PagamentoController {
 
     @PutMapping("/{codigo}/status")
     @Operation(description = "Alterar status de um pagamento")
-    public ResponseEntity<PagamentoResponse> atualizarStatus(@PathVariable Integer codigo, @RequestBody ProcessarPagamentoRequest pagamentoDTO) {
-        return ResponseEntity.ok().body(pagamentoService.processarPagamento(codigo, StatusProcessamento.valueOf(pagamentoDTO.getStatus())));
+    public ResponseEntity<PagamentoResponse> atualizarStatus(@PathVariable Integer codigo, @RequestBody @Valid ProcessarPagamentoRequest request) {
+        return ResponseEntity.ok().body(pagamentoService.processarPagamento(codigo, StatusProcessamento.valueOf(request.getStatus())));
     }
 }
