@@ -32,9 +32,9 @@ class PagamentoControllerTest {
     @InjectMocks
     private PagamentoController controller;
 
-    private PagamentoRequest pagamentoRequest = PagamentoRequest.instance();
+    private final PagamentoRequest pagamentoRequest = PagamentoRequest.instance();
 
-    private PagamentoResponse pagamentoResponse = PagamentoResponse.instance();
+    private final PagamentoResponse pagamentoResponse = PagamentoResponse.instance();
 
     @BeforeEach
     public void beforeEach() {
