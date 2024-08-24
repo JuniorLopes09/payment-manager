@@ -41,6 +41,11 @@ class CpfCnpjValidatorTest {
         String invalidCnpj = "12345678000100";
         assertFalse(validator.isValid(invalidCnpj, context));
     }
+
+    @Test
+    void testNullValid() {
+        assertTrue(validator.isValid(null, context));
+    }
     @Test
     void testInitialize() {
         validator.initialize(null);

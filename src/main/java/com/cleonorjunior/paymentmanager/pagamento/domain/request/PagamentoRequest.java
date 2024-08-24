@@ -49,7 +49,7 @@ public class PagamentoRequest {
     }
 
     @AssertTrue(message = "{default.numeroCartao.required.message}")
-    private boolean isNotEmptyForCardMethod() {
+    public boolean isNotEmptyForCardMethod() {
         if ("CARTAO_CREDITO".equals(metodoPagamento) || "CARTAO_DEBITO".equals(metodoPagamento)) {
             return !StringUtils.isEmpty(numeroCartao);
         }
@@ -58,7 +58,7 @@ public class PagamentoRequest {
     }
 
     @AssertTrue(message = "{default.numeroCartao.notRequired.message}")
-    private boolean isEmptyForOtherMethods() {
+    public boolean isEmptyForOtherMethods() {
         if (!"CARTAO_CREDITO".equals(metodoPagamento) && !"CARTAO_DEBITO".equals(metodoPagamento)) {
             return StringUtils.isEmpty(numeroCartao);
         }
