@@ -3,6 +3,7 @@ package com.cleonorjunior.paymentmanager.pagamento.domain.request;
 import com.cleonorjunior.paymentmanager.configuration.annotation.CpfCnpj;
 import com.cleonorjunior.paymentmanager.configuration.annotation.ValidEnum;
 import com.cleonorjunior.paymentmanager.pagamento.domain.enums.MetodoPagamento;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,7 +48,7 @@ public class PagamentoRequest {
                 .valor(BigDecimal.TEN)
                 .build();
     }
-
+    @Hidden
     @AssertTrue(message = "{default.numeroCartao.required.message}")
     public boolean isNotEmptyForCardMethod() {
         if ("CARTAO_CREDITO".equals(metodoPagamento) || "CARTAO_DEBITO".equals(metodoPagamento)) {
@@ -57,6 +58,7 @@ public class PagamentoRequest {
         return true;
     }
 
+    @Hidden
     @AssertTrue(message = "{default.numeroCartao.notRequired.message}")
     public boolean isEmptyForOtherMethods() {
         if (!"CARTAO_CREDITO".equals(metodoPagamento) && !"CARTAO_DEBITO".equals(metodoPagamento)) {
