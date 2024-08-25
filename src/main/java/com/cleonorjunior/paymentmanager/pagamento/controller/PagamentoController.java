@@ -49,7 +49,7 @@ public class PagamentoController {
 
     @GetMapping
     @Operation(description = "Buscar pagamentos com filtro")
-    public ResponseEntity<Page<PagamentoResponse>> findAll(FiltroPagamentoRequest filtroPagamento, Pageable paginacao) {
+    public ResponseEntity<Page<PagamentoResponse>> findAll(@Valid FiltroPagamentoRequest filtroPagamento, Pageable paginacao) {
         Page<PagamentoResponse> pagamentos = pagamentoService.findAll(filtroPagamento, paginacao);
 
         return ResponseEntity.ok().body(pagamentos);
