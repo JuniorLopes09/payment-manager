@@ -67,11 +67,11 @@ public class PagamentoService {
             }
 
             if (filtroPagamento.getCpfCnpjPagador() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("cpf_cnpj_pagador"), filtroPagamento.getCpfCnpjPagador()));
+                predicates.add(criteriaBuilder.equal(root.get("cpfCnpjPagador"), filtroPagamento.getCpfCnpjPagador()));
             }
 
             if (filtroPagamento.getStatus() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("status"), filtroPagamento.getCpfCnpjPagador()));
+                predicates.add(criteriaBuilder.equal(root.get("status"), filtroPagamento.getStatus()));
             }
 
             predicates.add(criteriaBuilder.equal(root.get("excluido"), Boolean.FALSE));
