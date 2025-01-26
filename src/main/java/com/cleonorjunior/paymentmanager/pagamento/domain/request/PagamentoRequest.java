@@ -8,6 +8,7 @@ import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Builder
+@ToString
 public class PagamentoRequest {
 
     @NotNull
