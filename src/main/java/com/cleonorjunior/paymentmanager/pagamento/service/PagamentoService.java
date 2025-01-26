@@ -2,17 +2,19 @@ package com.cleonorjunior.paymentmanager.pagamento.service;
 
 import com.cleonorjunior.paymentmanager.configuration.exception.BusinessException;
 import com.cleonorjunior.paymentmanager.configuration.exception.RegisterNotFoundException;
-import com.cleonorjunior.paymentmanager.pagamento.domain.request.PagamentoRequest;
-import com.cleonorjunior.paymentmanager.pagamento.domain.response.PagamentoResponse;
 import com.cleonorjunior.paymentmanager.pagamento.domain.enums.StatusProcessamento;
 import com.cleonorjunior.paymentmanager.pagamento.domain.model.HistoricoProcessamento;
+import com.cleonorjunior.paymentmanager.pagamento.domain.model.Pagamento;
+import com.cleonorjunior.paymentmanager.pagamento.domain.request.FiltroPagamentoRequest;
+import com.cleonorjunior.paymentmanager.pagamento.domain.request.PagamentoRequest;
+import com.cleonorjunior.paymentmanager.pagamento.domain.response.PagamentoResponse;
+import com.cleonorjunior.paymentmanager.pagamento.mapper.PagamentoMapper;
 import com.cleonorjunior.paymentmanager.pagamento.repository.HistoricoProcessamentoRepository;
 import com.cleonorjunior.paymentmanager.pagamento.repository.PagamentoRepository;
-import com.cleonorjunior.paymentmanager.pagamento.domain.request.FiltroPagamentoRequest;
-import com.cleonorjunior.paymentmanager.pagamento.mapper.PagamentoMapper;
-import com.cleonorjunior.paymentmanager.pagamento.domain.model.Pagamento;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,6 +26,8 @@ import java.util.List;
 
 @Service
 public class PagamentoService {
+
+    Logger logger = LoggerFactory.getLogger(PagamentoService.class);
 
     private final PagamentoRepository pagamentoRepository;
 
@@ -54,7 +58,10 @@ public class PagamentoService {
         return pagamentoRepository
                 .findByCodigoAndExcluido(codigo, Boolean.FALSE)
                 .map(pagamentoMapper::mapToResponse)
-                .orElseThrow(() -> new RegisterNotFoundException(codigo));
+                .orElseThrow(() -> {
+                    logger.warn("findById - Pagamento#{}: não encontrado", codigo);
+                    return new RegisterNotFoundException(codigo);
+                });
     }
 
     public Page<PagamentoResponse> findAll(FiltroPagamentoRequest filtroPagamento, Pageable paginacao) {
@@ -81,6 +88,10 @@ public class PagamentoService {
 
         Page<Pagamento> page = pagamentoRepository.findAll(specification, paginacao);
 
+        if (page.isEmpty()) {
+            logger.warn("Não foi possível encontrar nenhum pagamento com os parâmetros: {} {}", filtroPagamento, paginacao);
+        }
+
         return page.map(pagamentoMapper::mapToResponse);
     }
 
@@ -88,6 +99,7 @@ public class PagamentoService {
     public PagamentoResponse save(PagamentoRequest pagamentoRequest) {
 
         if(pagamentoRepository.existsById(pagamentoRequest.getCodigo())) {
+            logger.error("Pagamento#{}: {}", pagamentoRequest.getCodigo(), PAGAMENTO_JA_EXISTE_MESSAGE);
             throw new BusinessException(PAGAMENTO_JA_EXISTE_MESSAGE, HttpStatus.BAD_REQUEST);
         }
         Pagamento pagamento = pagamentoMapper.mapToEntity(pagamentoRequest);
@@ -101,7 +113,10 @@ public class PagamentoService {
     public PagamentoResponse update(Integer codigo, PagamentoRequest pagamentoRequest) {
         Pagamento pagamento = pagamentoRepository
                 .findByCodigoAndExcluido(codigo, Boolean.FALSE)
-                .orElseThrow(() -> new RegisterNotFoundException(codigo));
+                .orElseThrow(() -> {
+                    logger.warn("update - Pagamento#{} não encontrado", codigo);
+                    return new RegisterNotFoundException(codigo);
+                });
 
         pagamentoMapper.updateFromDTO(pagamento, pagamentoRequest);
 
@@ -111,7 +126,10 @@ public class PagamentoService {
     public void delete(Integer codigo) {
         Pagamento pagamento = pagamentoRepository
                 .findByCodigoAndExcluido(codigo, Boolean.FALSE)
-                .orElseThrow(() -> new RegisterNotFoundException(codigo));
+                .orElseThrow(() -> {
+                    logger.warn("delete - Pagamento#{} não encontrado", codigo);
+                    return new RegisterNotFoundException(codigo);
+                });
 
         pagamento.setExcluido(Boolean.TRUE);
 
@@ -122,20 +140,28 @@ public class PagamentoService {
     public PagamentoResponse processarPagamento(Integer codigo, StatusProcessamento status) {
         Pagamento pagamento = pagamentoRepository
                 .findByCodigoAndExcluido(codigo, Boolean.FALSE)
-                .orElseThrow(() -> new RegisterNotFoundException(codigo));
+                .orElseThrow(() -> {
+                    logger.error("processarPagamento - Pagamento#{} não encontrado", codigo);
+                    return new RegisterNotFoundException(codigo);
+                });
 
 
         if(pagamento.getStatus() == status) {
-            throw new BusinessException(String.format(ALTERAR_PARA_MESMO_STATUS, status));
+            String errorMessage = String.format(ALTERAR_PARA_MESMO_STATUS, status);
+            logger.error("Pagamento#{}: {}", codigo, errorMessage);
+            throw new BusinessException(errorMessage);
         }
 
         if(pagamento.getStatus() == StatusProcessamento.PROCESSADO_COM_SUCESSO) {
+            logger.error("Pagamento#{}: {}", codigo, PAGAMENTO_JA_PROCESSADO);
             throw new BusinessException(PAGAMENTO_JA_PROCESSADO);
         }
 
         if(pagamento.getStatus() == StatusProcessamento.PROCESSADO_COM_FALHA
                 && status != StatusProcessamento.PENDENTE_PROCESSAMENTO) {
-            throw new BusinessException(String.format(ALTERAR_STATUS_INVALIDO, pagamento.getStatus(), status));
+            String errorMessage = String.format(ALTERAR_STATUS_INVALIDO, pagamento.getStatus(), status);
+            logger.error("Pagamento#{}: {}", codigo, errorMessage);
+            throw new BusinessException(errorMessage);
         }
 
         pagamento.setStatus(status);
@@ -149,5 +175,7 @@ public class PagamentoService {
     protected void logHistoricoProcessamento(Pagamento pagamento) {
         HistoricoProcessamento historicoProcessamento = new HistoricoProcessamento(pagamento);
         historicoProcessamentoRepository.save(historicoProcessamento);
+
+        logger.info("Historico de processamento registrado para o Pagamento#{}", pagamento.getCodigo());
     }
 }
