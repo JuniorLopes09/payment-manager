@@ -7,3 +7,8 @@ server:
   port: ${PORT:8080}
   servlet:
     context-path: /api/v1
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  issuer: 'paymentmanager-apí'
+  expiration-time-minutes: 15
+  zoneId: 'America/Belem'
