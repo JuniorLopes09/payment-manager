@@ -7,6 +7,7 @@ import com.cleonorjunior.paymentmanager.usuario.domain.request.CreateUserRequest
 import com.cleonorjunior.paymentmanager.usuario.domain.request.LoginRequest;
 import com.cleonorjunior.paymentmanager.usuario.domain.response.CreateUserResponse;
 import com.cleonorjunior.paymentmanager.usuario.domain.response.LoginResponse;
+import com.cleonorjunior.paymentmanager.usuario.repository.CargoRepository;
 import com.cleonorjunior.paymentmanager.usuario.repository.UsuarioRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,12 +26,15 @@ public class UsuarioService {
 
     private final UsuarioRepository userRepository;
 
+    private final CargoRepository cargoRepository;
+
     private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(AuthenticationManager authenticationManager, TokenService jwtTokenService, UsuarioRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioService(AuthenticationManager authenticationManager, TokenService jwtTokenService, UsuarioRepository userRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenService = jwtTokenService;
         this.userRepository = userRepository;
+        this.cargoRepository = cargoRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -60,12 +64,14 @@ public class UsuarioService {
 
     public CreateUserResponse createUser(CreateUserRequest createUserRequest) {
 
+        Cargo cargo = cargoRepository.findByCargo(TipoCargo.ROLE_USUARIO).orElseThrow();
+
         Usuario newUser = Usuario.builder()
                 .email(createUserRequest.email())
                 .senha(passwordEncoder.encode(createUserRequest.senha()))
                 .cargos(
                         Collections.singletonList(
-                                Cargo.builder().cargo(TipoCargo.USUARIO).build()
+                                cargo
                         )
                 )
                 .build();
