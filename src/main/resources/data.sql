@@ -1,0 +1,3 @@
+INSERT INTO cargo (cargo) VALUES
+  'ROLE_ADMIN',
+  'ROLE_USUARIO';
