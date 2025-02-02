@@ -21,9 +21,11 @@ import java.net.URI;
 
 
 @RestController
-@RequestMapping("/pagamentos")
+@RequestMapping(PagamentoController.BASE_PATH)
 @Tag(name = "Pagamento")
 public class PagamentoController {
+
+    public static final String BASE_PATH = "/pagamentos";
 
     Logger logger = LoggerFactory.getLogger(PagamentoController.class);
 
@@ -44,7 +46,7 @@ public class PagamentoController {
 
         logger.info("Pagamento#{} incluido com sucesso", persistedPagamento.getCodigo());
 
-        URI uri = uriBuilder.path("/pagamentos").buildAndExpand(persistedPagamento.getCodigo()).toUri();
+        URI uri = uriBuilder.path(BASE_PATH).buildAndExpand(persistedPagamento.getCodigo()).toUri();
 
         return ResponseEntity.created(uri).body(persistedPagamento);
     }
