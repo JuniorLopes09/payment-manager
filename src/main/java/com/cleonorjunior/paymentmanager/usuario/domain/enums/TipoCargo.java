@@ -1,5 +1,5 @@
 package com.cleonorjunior.paymentmanager.usuario.domain.enums;
 
 public enum TipoCargo {
-    USUARIO, ADMIN
+    ROLE_USUARIO, ROLE_ADMIN
 }
