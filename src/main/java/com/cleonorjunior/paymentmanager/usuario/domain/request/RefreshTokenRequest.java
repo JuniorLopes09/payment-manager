@@ -1,6 +1,8 @@
 package com.cleonorjunior.paymentmanager.usuario.domain.request;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record RefreshTokenRequest(
-        String refreshToken
+        @NotBlank String refreshToken
 ) {
 }

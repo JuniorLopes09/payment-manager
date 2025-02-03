@@ -12,3 +12,6 @@ jwt:
   issuer: 'paymentmanager-apí'
   expiration-time-minutes: 15
   zoneId: 'America/Belem'
+user:
+  password:
+    regex: ^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$

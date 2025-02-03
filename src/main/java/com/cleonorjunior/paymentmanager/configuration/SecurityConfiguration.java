@@ -36,6 +36,8 @@ public class SecurityConfiguration {
                     req.requestMatchers("/auth/login").permitAll();
                     req.requestMatchers("/auth/register").permitAll();
                     req.requestMatchers("/auth/refresh").permitAll();
+                    req.requestMatchers("/swagger-ui/**").permitAll();
+                    req.requestMatchers("/v3/api-docs/**").permitAll();
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

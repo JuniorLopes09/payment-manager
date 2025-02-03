@@ -1,5 +1,6 @@
 package com.cleonorjunior.paymentmanager.usuario.service;
 
+import com.cleonorjunior.paymentmanager.configuration.exception.BusinessException;
 import com.cleonorjunior.paymentmanager.usuario.domain.enums.TipoCargo;
 import com.cleonorjunior.paymentmanager.usuario.domain.model.Cargo;
 import com.cleonorjunior.paymentmanager.usuario.domain.model.Usuario;
@@ -63,6 +64,10 @@ public class UsuarioService {
 
 
     public CreateUserResponse createUser(CreateUserRequest createUserRequest) {
+
+        if (userRepository.existsByEmail(createUserRequest.email())) {
+            throw new BusinessException("Email já cadastrado");
+        }
 
         Cargo cargo = cargoRepository.findByCargo(TipoCargo.ROLE_USUARIO).orElseThrow();
 
