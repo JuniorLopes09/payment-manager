@@ -1,5 +1,6 @@
-package com.cleonorjunior.paymentmanager.configuration.annotation;
+package com.cleonorjunior.paymentmanager.configuration.annotation.validator;
 
+import com.cleonorjunior.paymentmanager.configuration.annotation.CpfCnpj;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 

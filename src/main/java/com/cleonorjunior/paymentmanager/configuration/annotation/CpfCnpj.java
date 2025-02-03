@@ -1,5 +1,6 @@
 package com.cleonorjunior.paymentmanager.configuration.annotation;
 
+import com.cleonorjunior.paymentmanager.configuration.annotation.validator.CpfCnpjValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;

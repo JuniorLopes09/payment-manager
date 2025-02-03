@@ -1,5 +1,6 @@
 package com.cleonorjunior.paymentmanager.configuration.annotation;
 
+import com.cleonorjunior.paymentmanager.configuration.annotation.validator.EnumValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

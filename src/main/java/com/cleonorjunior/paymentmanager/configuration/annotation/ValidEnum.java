@@ -1,5 +1,6 @@
 package com.cleonorjunior.paymentmanager.configuration.annotation;
 
+import com.cleonorjunior.paymentmanager.configuration.annotation.validator.EnumValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.ElementType;

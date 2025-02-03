@@ -1,5 +1,6 @@
 package com.cleonorjunior.paymentmanager.configuration.annotation;
 
+import com.cleonorjunior.paymentmanager.configuration.annotation.validator.CpfCnpjValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 import org.junit.jupiter.api.BeforeEach;
